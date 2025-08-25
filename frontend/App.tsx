@@ -1,10 +1,11 @@
 import { View, Text, Image, Platform } from "react-native";
-import MapView, { Marker, Callout } from "react-native-maps";
+import MapView, { Marker, Callout, UrlTile } from "react-native-maps";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Constants from "expo-constants";
 
 const queryClient = new QueryClient();
+const isExpoGo = Constants.appOwnership === "expo"; // true no Expo Go
 
 type Farm = {
   id: number;
@@ -58,43 +59,61 @@ function MapScreen() {
     retry: 1
   });
 
-  return (
-    <View style={{ flex: 1 }}>
-      <MapView
-        style={{ flex: 1 }}
-        provider="google"                 // <- agora Google Maps (funciona no dev-client)
-        initialRegion={{
-          latitude: -15.9,
-          longitude: -48.6,
-          latitudeDelta: 4.5,
-          longitudeDelta: 4.5,
-        }}
-        onMapReady={() => console.log("MAP READY")}
-      >
-        {data?.map(f => (
-          <Marker key={f.id} coordinate={{ latitude: f.lat, longitude: f.lng }}>
-            <Image source={require("./assets/farm-icon.png")} style={{ width: 36, height: 36 }} />
-            <Callout>
-              <View style={{ padding: 6, maxWidth: 220 }}>
-                <Text style={{ fontWeight: "bold", fontSize: 16 }}>{f.name}</Text>
-                {f.crop && <Text>Cultura: {f.crop}</Text>}
-                {f.area_ha != null && <Text>Área: {f.area_ha} ha</Text>}
-                {f.owner && <Text>Produtor: {f.owner}</Text>}
-                <Text style={{ marginTop: 4, fontSize: 12, opacity: 0.6 }}>
-                  {f.lat.toFixed(4)}, {f.lng.toFixed(4)}
-                </Text>
-              </View>
-            </Callout>
-          </Marker>
-        ))}
-      </MapView>
+return (
+  <View style={{ flex: 1 }}>
+    <MapView
+      style={{ flex: 1 }}
+      provider={isExpoGo ? undefined : "google"} // Expo Go => usa default, build/dev-client => usa Google
+      initialRegion={{
+        latitude: -15.9,
+        longitude: -48.6,
+        latitudeDelta: 4.5,
+        longitudeDelta: 4.5,
+      }}
+      onMapReady={() => console.log("MAP READY")}
+    >
+      {/* só no Expo Go renderiza tiles OSM */}
+      {isExpoGo && (
+        <UrlTile
+          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maximumZ={19}
+          tileSize={256}
+        />
+      )}
 
-      <Text style={{ position:"absolute", top:10, left:10, backgroundColor:"#fff", padding:6, borderRadius:6 }}>
-        {BASE_URL} • farms: {data?.length ?? 0} {isLoading ? "⏳" : isError ? "❌" : "✅"}
-      </Text>
-    </View>
-  );
-}
+      {data?.map(f => (
+        <Marker key={f.id} coordinate={{ latitude: f.lat, longitude: f.lng }}>
+          <Image source={require("./assets/farm-icon.png")} style={{ width: 36, height: 36 }} />
+          <Callout>
+            <View style={{ padding: 6, maxWidth: 220 }}>
+              <Text style={{ fontWeight: "bold", fontSize: 16 }}>{f.name}</Text>
+              {f.crop && <Text>Cultura: {f.crop}</Text>}
+              {f.area_ha != null && <Text>Área: {f.area_ha} ha</Text>}
+              {f.owner && <Text>Produtor: {f.owner}</Text>}
+              <Text style={{ marginTop: 4, fontSize: 12, opacity: 0.6 }}>
+                {f.lat.toFixed(4)}, {f.lng.toFixed(4)}
+              </Text>
+            </View>
+          </Callout>
+        </Marker>
+      ))}
+    </MapView>
+
+    <Text
+      style={{
+        position: "absolute",
+        top: 10,
+        left: 10,
+        backgroundColor: "#fff",
+        padding: 6,
+        borderRadius: 6,
+      }}
+    >
+      {BASE_URL} • farms: {data?.length ?? 0}{" "}
+      {isLoading ? "⏳" : isError ? "❌" : "✅"}
+    </Text>
+  </View>
+);
 
 export default function App() {
   return (
