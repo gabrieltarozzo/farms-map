@@ -20,5 +20,7 @@ ENV WEB_DOCUMENT_ROOT=/app/public
 # SQLite (teste)
 RUN mkdir -p /app/database && touch /app/database/database.sqlite
 
+EXPOSE 80
+
 # migra + seed e sobe o nginx/php-fpm
 CMD bash -lc "php artisan migrate --force || true; php artisan db:seed --force || true; /usr/bin/supervisord -n"
