@@ -21,26 +21,25 @@ Mapa simples para visualizar **fazendas** vindas de um backend **Laravel**, com 
 ## 🧱 **Arquitetura (frontend)**
 
 frontend/
-└─ src/
-├─ app/
-│ └─ App.tsx
-├─ config/
-│ └─ env.ts # resolve BASE_URL (prioriza API_URL do .env)
-├─ features/
-│ └─ farms/
-│ ├─ api/
-│ │ └─ farms.api.ts
-│ ├─ components/
-│ │ ├─ FarmCard.tsx
-│ │ ├─ FarmList.tsx
-│ │ └─ FarmMarker.tsx
-│ ├─ hooks/
-│ │ └─ useFarms.ts
-│ ├─ screens/
-│ │ └─ FarmsMapScreen.tsx
-│ └─ types.ts
-└─ assets/
-└─ farm-icon.png
-
+|-- src/
+|   |-- app/
+|   |   `-- App.tsx
+|   |-- config/
+|   |   `-- env.ts
+|   |-- features/
+|   |   `-- farms/
+|   |       |-- api/
+|   |       |   `-- farms.api.ts
+|   |       |-- components/
+|   |       |   |-- FarmCard.tsx
+|   |       |   |-- FarmList.tsx
+|   |       |   `-- FarmMarker.tsx
+|   |       |-- hooks/
+|   |       |   `-- useFarms.ts
+|   |       |-- screens/
+|   |       |   `-- FarmsMapScreen.tsx
+|   |       `-- types.ts
+`-- assets/
+    `-- farm-icon.png
 
 Feito com 💙 por Gabriel.
