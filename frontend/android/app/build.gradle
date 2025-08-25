@@ -5,6 +5,13 @@ apply plugin: "com.facebook.react"
 // ADDED: carrega variáveis do .env via react-native-config
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
+// ADDED: carrega credenciais do keystore local (android/keystore.properties)
+def keystorePropsFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropsFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropsFile))
+}
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -98,6 +105,20 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        // ADDED: release usando android/keystore.properties (fallback p/ debug)
+        release {
+            if (keystorePropsFile.exists()) {
+                storeFile file(keystoreProperties["storeFile"])
+                storePassword keystoreProperties["storePassword"]
+                keyAlias keystoreProperties["keyAlias"]
+                keyPassword keystoreProperties["keyPassword"]
+            } else {
+                storeFile file('debug.keystore')
+                storePassword 'android'
+                keyAlias 'androiddebugkey'
+                keyPassword 'android'
+            }
+        }
     }
     buildTypes {
         debug {
@@ -108,7 +129,8 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            // CHANGED: usar o signingConfigs.release (não o debug)
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
 

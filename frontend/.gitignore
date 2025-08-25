@@ -21,9 +21,12 @@ DerivedData
 *.ipa
 *.xcuserstate
 **/.xcode.env.local
-
+.env
 # env
 .env*
+
+android/keystore.properties
+android/app/my-release-key.keystore
 
 
 # Android/IntelliJ
@@ -77,3 +80,5 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.env
+.env

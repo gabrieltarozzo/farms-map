@@ -2,7 +2,7 @@ import axios from "axios";
 import { BASE_URL } from "@/config/env";
 import { Farm } from "../types";
 
-export const api = axios.create({ baseURL: BASE_URL, timeout: 8000 });
+export const api = axios.create({ baseURL: BASE_URL, timeout: 60000 });
 
 export const isValidCoord = (x: number) => Number.isFinite(x) && Math.abs(x) <= 180;
 
