@@ -20,4 +20,8 @@ class FarmController extends Controller {
     ]);
     return Farm::create($data);
   }
+
+  public function show(Farm $farm) {
+    return $farm;
+}
 }
