@@ -18,7 +18,7 @@ Mapa simples para visualizar **fazendas** vindas de um backend **Laravel**, com 
 
 ---
 
-## 🧱 **Arquitetura (frontend)**
+## 🧱 **Arquitetura (frontend) feature-based**
 
 ```text
 frontend/
