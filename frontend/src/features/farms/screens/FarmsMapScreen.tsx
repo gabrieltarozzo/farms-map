@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import { useFarms } from "../hooks/useFarms";
 import { Farm } from "../types";
@@ -75,6 +75,7 @@ export default function FarmsMapScreen() {
 
       {showList && (
         <View style={styles.sheetTop}>
+           <ScrollView contentContainerStyle={{ paddingBottom: 4 }}>
           {farms.map(item => (
             <View key={item.id} style={styles.itemRow}>
               <View style={{ flex: 1 }}>
@@ -88,6 +89,7 @@ export default function FarmsMapScreen() {
               </TouchableOpacity>
             </View>
           ))}
+          </ScrollView>
         </View>
       )}
 
@@ -107,6 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 2,
     zIndex: 5,
+    color: "#111",
   },
   fabCol: { position: "absolute", right: 12, top: 10, gap: 8, alignItems: "flex-end", zIndex: 5 },
   fab: { backgroundColor: "#1e90ff", paddingHorizontal: 12, paddingVertical: 10, borderRadius: 12, elevation: 3 },
@@ -118,7 +121,7 @@ const styles = StyleSheet.create({
     right: 12,
     top: 64, // abaixo do HUD/FAB
     maxHeight: 220,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffffee",
     borderRadius: 14,
     padding: 12,
     elevation: 5,
@@ -132,8 +135,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 8,
   },
-  itemTitle: { fontWeight: "700" },
-  itemSub: { opacity: 0.75, marginTop: 2 },
+  itemTitle: { fontWeight: "700", color: "#111" },
+  itemSub: { color: "#556", opacity: 0.75, marginTop: 2 },
   itemBtn: { backgroundColor: "#1e90ff", paddingVertical: 8, paddingHorizontal: 12, borderRadius: 8, marginLeft: 10 },
   itemBtnTxt: { color: "#fff", fontWeight: "700" },
 });
